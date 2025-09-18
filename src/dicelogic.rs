@@ -1,26 +1,29 @@
+use crate::roller::roll_dice;
 
-
-pub fn process_input(String input) -> String {
- if input[0] == 0..9 {
-    return number_node(input);
+pub fn process_input(input : String) -> String {
+    let i : usize =0;
+ if input.chars().nth(i).unwrap().to_digit(10).unwrap() >= 1 && input.chars().nth(i).unwrap().to_digit(10).unwrap() <= 9 {
+    return number_node(input).to_string();
  }
+ return "".to_string();
 }
 
-fn number_node(String input) -> u32 {
-    let i = 0;
-    let result: String = String::new();
-    while input[i] == 0..9 {
+fn number_node(input : String) -> u32 {
+    let mut i : usize = 0;
+    let mut result: Vec<u32> = Vec::new();
+    while input.chars().nth(i).unwrap().to_digit(10).unwrap() >= 1 && input.chars().nth(i).unwrap().to_digit(10).unwrap() <= 9 {
         // Grabs the number
-        result.push(input[i]);
-        i++;
+        result.push(input.chars().nth(i).unwrap().to_digit(10).unwrap());
+        i +=1;
     }
-    else if input[i] == "d" {
-        return roll_dice(result, dice_node(input[i..input.length()]))
+    if input.chars().nth(i).unwrap() == 'd' {
+        return roll_dice(result.iter().sum(), dice_node(input[i..input.len()].to_string())).iter().sum();
     }
+    return 0;
 }
 
-fn dice_node(String input) -> u32 {
-    if input[0] == 0..9 {
+fn dice_node(input : String) -> u32 {
+    if input.chars().nth(0).unwrap().to_digit(10).unwrap() >= 1 && input.chars().nth(0).unwrap().to_digit(10).unwrap() <= 9 {
         return number_node(input);
     }
     return 0;
@@ -34,8 +37,8 @@ mod tests {
     #[test]
     fn test() {
         let input = String::from("1d6");
-        let expected = 1;
-        let result = dice_node(input);
-        assert_eq!(expected, result.length());
+        let expected = String::from("1");
+        let result = process_input(input);
+        assert_eq!(expected, result);
     }
 }
