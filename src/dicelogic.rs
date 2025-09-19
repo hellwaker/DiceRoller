@@ -1,8 +1,8 @@
 use crate::roller::roll_dice;
 
 pub fn process_input(input : String) -> String {
-    let i : usize =0;
- if input.chars().nth(i).unwrap().to_digit(10).unwrap() >= 1 && input.chars().nth(i).unwrap().to_digit(10).unwrap() <= 9 {
+    let i : usize = 0;
+ if input.chars().nth(i).unwrap() >= '1' && input.chars().nth(i).unwrap().to_digit(10).unwrap() <= 9 {
     return number_node(input).to_string();
  }
  return "".to_string();
@@ -11,7 +11,7 @@ pub fn process_input(input : String) -> String {
 fn number_node(input : String) -> u32 {
     let mut i : usize = 0;
     let mut result: Vec<u32> = Vec::new();
-    while input.chars().nth(i).unwrap().to_digit(10).unwrap() >= 1 && input.chars().nth(i).unwrap().to_digit(10).unwrap() <= 9 {
+    while input.chars().nth(i).expect("Couldn't unwrap due to no character existing").is_digit(10) {
         // Grabs the number
         result.push(input.chars().nth(i).unwrap().to_digit(10).unwrap());
         i +=1;
@@ -23,7 +23,7 @@ fn number_node(input : String) -> u32 {
 }
 
 fn dice_node(input : String) -> u32 {
-    if input.chars().nth(0).unwrap().to_digit(10).unwrap() >= 1 && input.chars().nth(0).unwrap().to_digit(10).unwrap() <= 9 {
+    if input.chars().nth(0).expect("String is empty").is_digit(10) {
         return number_node(input);
     }
     return 0;
