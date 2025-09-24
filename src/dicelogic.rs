@@ -9,21 +9,26 @@ pub fn process_input(input : String) -> String {
 }
 
 fn number_node(input : String, mut i: usize) -> u32 {
-    let mut result: Vec<u32> = Vec::new();
+    let mut result: String = String::new();
     while input.chars().nth(i).expect("Couldn't unwrap due to no character existing").is_digit(10) {
-        result.push(input.chars().nth(i).unwrap().to_digit(10).unwrap());
+        result.push(input.chars().nth(i).unwrap());
         i +=1;
+        if ( input.len() <= i )
+        {
+            return result.parse::<u32>().unwrap();
+        }
     }
     if input.chars().nth(i).unwrap() == 'd' {
         // sends results backs to dice node to work out what size dice is being rolled.
-        let dice_size = dice_node(input[i..input.len()].to_string(), i);
-        return roll_dice(result.iter().sum(), dice_size).iter().sum();
+        i += 1;
+        let dice_size = number_node(input[i..].to_string(), 0);
+        return roll_dice(result.parse::<u32>().unwrap(), dice_size).iter().sum();
     }
-    return 0;
+    return result.parse::<u32>().unwrap();
 }
 
-fn dice_node(input : String, mut i: usize) -> u32 {
-    if input.chars().nth(0).expect("String is empty").is_digit(10) {
+fn dice_node(input : String, i: usize) -> u32 {
+    if input.chars().nth(i).expect("String is empty").is_digit(10) {
         return number_node(input, i);
     }
     return 0;
