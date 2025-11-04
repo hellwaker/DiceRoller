@@ -10,20 +10,33 @@ pub fn process_input(input : String) -> String {
 
 fn number_node(input : String, mut i: usize) -> u32 {
     let mut result: String = String::new();
+    // Reading in any number expecting the format ###d### where # is a number
     while input.chars().nth(i).expect("Couldn't unwrap due to no character existing").is_digit(10) {
         result.push(input.chars().nth(i).unwrap());
         i +=1;
-        if ( input.len() <= i )
-        {
+        if input.len() <= i {
             return result.parse::<u32>().unwrap();
         }
     }
+    // Picking up Brackets at the moment assuming no stacked brackets
+    if input.chars().nth(i).unwrap() == '(' {
+        let mut bracket_content: String = String::new();
+        i += 1;
+        while input.chars().nth(i).unwrap() != ')' {
+            bracket_content.push(input.chars().nth(i).unwrap());
+            i += 1;
+        }
+        result = number_node(bracket_content.clone(), bracket_content.len()).to_string();
+    }
+
+    // Picking up the d in ###d###
     if input.chars().nth(i).unwrap() == 'd' {
         // sends results backs to dice node to work out what size dice is being rolled.
         i += 1;
         let dice_size = number_node(input[i..].to_string(), 0);
         return roll_dice(result.parse::<u32>().unwrap(), dice_size).iter().sum();
     }
+
     return result.parse::<u32>().unwrap();
 }
 

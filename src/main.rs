@@ -4,6 +4,7 @@ use serenity::prelude::*;
 
 mod roller;
 mod server;
+mod dicelogic;
 
 #[tokio::main]
 async fn main() {
