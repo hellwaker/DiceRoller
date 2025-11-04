@@ -53,10 +53,19 @@ mod tests {
     
     //This is testing to get basic functionality working
     #[test]
-    fn test() {
+    fn random_test() {
         let input = String::from("1d6");
         let expected = String::from("1");
         let result = process_input(input);
         assert_eq!(expected, result);
+    }
+
+    //Testing basic braket testing
+    #[test]
+    fn bracket_test() {
+        let input = String::from("(1d1)");
+        let expected = String::from("1");
+        let result = process_input(input);
+        assert_eq!(expected,result);
     }
 }
