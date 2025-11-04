@@ -5,6 +5,9 @@ pub fn process_input(input : String) -> String {
  if input.chars().nth(i).unwrap() >= '1' && input.chars().nth(i).unwrap().to_digit(10).unwrap() <= 9 {
     return number_node(input, i).to_string();
  }
+ if input.chars().nth(i).unwrap() == '(' {
+    return number_node(input, i).to_string();
+ }
  return "".to_string();
 }
 
@@ -18,17 +21,16 @@ fn number_node(input : String, mut i: usize) -> u32 {
             return result.parse::<u32>().unwrap();
         }
     }
+
     // Picking up Brackets at the moment assuming no stacked brackets
     if input.chars().nth(i).unwrap() == '(' {
-        let mut bracket_content: String = String::new();
-        i += 1;
-        while input.chars().nth(i).unwrap() != ')' {
-            bracket_content.push(input.chars().nth(i).unwrap());
-            i += 1;
-        }
-        result = number_node(bracket_content.clone(), bracket_content.len()).to_string();
+        let temp_result;
+        (temp_result, i) = brackets(input.clone(),i);
+        result.push_str(&temp_result);
     }
-
+    if i >= input.len() {
+        return result.parse::<u32>().unwrap();
+    }
     // Picking up the d in ###d###
     if input.chars().nth(i).unwrap() == 'd' {
         // sends results backs to dice node to work out what size dice is being rolled.
@@ -38,6 +40,24 @@ fn number_node(input : String, mut i: usize) -> u32 {
     }
 
     return result.parse::<u32>().unwrap();
+}
+
+fn brackets(input: String, mut i: usize) -> (String, usize) {
+    let mut bracket_content: String = String::new();
+    i += 1;
+    while input.chars().nth(i).unwrap() != ')' {
+        if input.chars().nth(i).unwrap() == '(' {
+            let result;
+            (result ,i) = brackets(input.clone() ,i);
+            bracket_content.push_str(&result);
+        }
+        else {
+            bracket_content.push(input.chars().nth(i).unwrap());
+        }
+        i += 1;
+    }
+    i+=1;
+    return (number_node(bracket_content.clone(), 0).to_string(),i);
 }
 
 fn dice_node(input : String, i: usize) -> u32 {
