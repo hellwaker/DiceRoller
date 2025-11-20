@@ -1,4 +1,5 @@
 use crate::roller::roll_dice;
+use crate::lexer;
 
 pub fn process_input(input : String) -> String {
     let i : usize = 0;

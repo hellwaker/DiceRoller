@@ -5,6 +5,7 @@ use serenity::prelude::*;
 mod roller;
 mod server;
 mod dicelogic;
+mod lexer;
 
 #[tokio::main]
 async fn main() {
