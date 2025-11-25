@@ -1,10 +1,19 @@
+#[derive(PartialEq, Debug)]
+struct TokenNum {
+    number: String
+}
+
+
+
 #[derive(Debug,PartialEq)]
 pub enum Token {
     // Basics
-    TokNum = 1,
-    TokDice = 2,
+    TokNum(TokenNum),
+    TokDice,
     // advanced
-    TokBrac = 3,
+    TokBrac,
+    // When there isn't any tokens
+    TokEmpty,
 }
 
 pub fn lexer(input: String) -> Vec<Token> {
@@ -12,8 +21,19 @@ pub fn lexer(input: String) -> Vec<Token> {
     return result;
 }
 
-pub fn find_next_token(input: String) -> Token {
-    
+pub fn find_next_token(input: String, mut n:usize) -> (Token, usize) {
+    let mut token_temp: String = String::new();
+    // 
+    while input.chars().nth(n).expect("Couldn't unwrap due to no character existing").is_digit(10) {
+        token_temp.push(input.chars().nth(n).unwrap());
+        n +=1;
+        if input.len() <= n || !input.chars().nth(n).expect("Couldn't unwrap due to no character existing").is_digit(10) {
+            let result = TokenNum{ number: token_temp};
+            return (Token::TokNum(result), n);
+        }
+    }
+
+    return (Token::TokEmpty, n);
 }
 
 #[cfg(test)]
